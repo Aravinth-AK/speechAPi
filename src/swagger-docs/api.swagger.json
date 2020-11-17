@@ -1,0 +1,113 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Speech Recogonization API",
+        "description": "Returns available API services of Speech Recogonization",
+        "version": "1.0.0",
+        "contact": {
+            "name": "API Support",
+            "email": "aravinthk@fss.co.in"
+        }
+    },
+    "produces": [
+        "application/json"
+    ],
+    "host": "localhost:2020",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "Voice Parser",
+            "description": "API service To Manage the all Bank Related queries through converted voice pattern.User can able to get details such as Bank Account details, Transaction Details, Credit card details, Bank Branch Name of the accounts etc.,\n since this is POC we have design the coverage to minimal range"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+      
+        "/bank-account/user-query/": {
+            "post": {
+                "tags": [
+                    "Bank-Accounts"
+                ],
+                "summary": "get relevant information with regards to user query",
+                "description": "This is an sample POC API to handle the translated user voice query to provide the relevant information requested by the user.",
+                "operationId": "user-query",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "The user query statement provided by the voice recognition system in front end(like alexa).you can make some model queries like \n * get my account details \n * fetch my transaction \n * active loans \n * get my credit card details \n * what is my outstanding loan amount",
+                        "required": true,
+                        "type": "object",
+                        "schema": {
+                            "$ref": "#/definitions/GetRequestedDetails"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response of parser API",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/GetUserQueryResponse"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/400"
+                    },
+                    "500": {
+                        "$ref": "#/responses/500"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "GetRequestedDetails": {
+            "type": "object",
+            "properties": {
+                "voicePattern": {
+                    "type": "string",
+                    "description": "user query statement"
+                }
+            }
+        },
+        "GetUserQueryResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "object",
+                    "description": "Status response of API",
+                    "enum": [
+                        "success",
+                        "Account Unavailable",
+                        "error"
+                    ]
+                },
+                "content": {
+                    "type": "object",
+                    "description": "Bank details requested by the user"
+                }
+            }
+        }
+    },
+
+    "responses": {
+        "200": {
+            "description": "An array of enduse objects"
+        },
+        "400": {
+            "description": "The server was unable to process the request sent by the client due to invalid syntax."
+        },
+        "500": {
+            "description": "Something has gone wrong on the server, but the server could not be more specific on what the exact problem is."
+        }
+    }
+
+}
+
